@@ -2,6 +2,7 @@
 #include <array>
 #include <numeric>
 #include <algorithm>
+#include <cassert>
 
 constexpr int N{9};
 constexpr int BOARDSUM{45 * N};
@@ -84,6 +85,49 @@ public:
         return square;
     }
 
+    // Check if a guess is valid
+    bool isGuessValid(int linearInd, int guess)
+    {
+        assert(guess > 0 && guess < 9);
+
+        // Check if guess exists in row
+        auto row{grid[indToRow(linearInd)]};
+        auto it{std::find(row.begin(), row.end(), guess)};
+
+        if (it != row.end())
+        {
+            return false;
+        }
+
+        // Check if guess exists in column
+        auto col{getColumn(indToCol(linearInd))};
+        auto it{std::find(col.begin(), col.end(), guess)};
+
+        if (it != col.end())
+        {
+            return false;
+        }
+
+        // Check if guess exists in square
+        auto square{getSquare(indToRow(linearInd), indToCol(linearInd))};
+        auto it{std::find(square.begin(), square.end(), guess)};
+
+        if (it != square.end())
+        {
+            return false;
+        }
+
+        // If the guess doesn't exist anywhere else in row, col, square
+        // - it's a valid guess.
+        return true;
+    }
+
+    // Check if a cell is empty.
+    bool isEmpty(int row, int col)
+    {
+        return grid[row][col] == 0;
+    }
+
     // Check for a valid array
     static bool isArrayValid(rowType row)
     {
@@ -97,12 +141,7 @@ public:
         return true;
     }
 
-    // Check if a cell is empty.
-    bool isEmpty(int row, int col)
-    {
-        return grid[row][col] == 0;
-    }
-
+    // Check for a complete and winning puzzle
     bool isPuzzleValid()
     {
 
@@ -185,6 +224,18 @@ private:
                 grid[ii][jj] = sampleGrid[ii][jj];
             }
         }
+    }
+
+    // Convert linear index to row index
+    int indToRow(int x)
+    {
+        return x / N;
+    }
+
+    // Convert linear index to col index
+    int indToCol(int x)
+    {
+        return x % N;
     }
 };
 
