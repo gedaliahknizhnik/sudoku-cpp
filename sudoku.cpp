@@ -3,15 +3,19 @@
 #include <numeric>
 #include <algorithm>
 #include <cassert>
+#include <functional>
 
 // TODO: Check for valid puzzle before starting
 // TODO: Efficiency upgrades (std::array copying, etc.)
+//  TODO: Use iterators to go over the columns and squares.
 // TODO: Reading in files?
+// TODO: Check for unneeded functions
 
 constexpr int N{9};
 constexpr int BOARDSUM{45 * N};
 
 using rowType = std::array<int, N>;
+using gridType = std::array<rowType, N>;
 
 // Overload print operator for std::array
 std::ostream &operator<<(std::ostream &out, rowType row)
@@ -34,6 +38,7 @@ public:
     SudokuBoard()
     {
         generateSudokuBoard();
+        int i{1};
     }
 
     // Copy constructor (note that this is a deep copy)
@@ -143,19 +148,6 @@ public:
         return isEmpty(indToRow(linearInd), indToCol(linearInd));
     }
 
-    // Check for a valid array
-    static bool isArrayValid(rowType row)
-    {
-        std::sort(row.begin(), row.end());
-        for (int ii{1}; ii <= N; ++ii)
-        {
-            if (row[ii - 1] != ii)
-                return false;
-        }
-
-        return true;
-    }
-
     // Check for a complete and winning puzzle
     bool isPuzzleValid()
     {
@@ -188,28 +180,12 @@ public:
         return true;
     }
 
-    // Check if all grid entries are complete by summing over the whole board.
-    //  - sum < BOARDSUM -> empty slots
-    //  - sum > BOARDSUM -> Invalid entries
-    // FIXME: This is not valid - what if other entries that sum to 45?
-    bool isFull()
-    {
-        int sum{0};
-
-        for (auto row : grid)
-        {
-            sum += std::accumulate(row.begin(), row.end(), 0);
-        }
-
-        return sum == BOARDSUM;
-    }
-
     // Solve the puzzle
     bool solvePuzzle();
     bool solvePuzzle(int linearInd);
 
 private:
-    std::array<rowType, N> grid{};
+    gridType grid{};
 
     // Generate the initial board. Currently just a static puzzle.
     void generateSudokuBoard()
@@ -297,6 +273,19 @@ private:
     void guessAtInd(int linearInd, int guess)
     {
         grid[indToRow(linearInd)][indToCol(linearInd)] = guess;
+    }
+
+    // Check for a valid array
+    static bool isArrayValid(rowType row)
+    {
+        std::sort(row.begin(), row.end());
+        for (int ii{1}; ii <= N; ++ii)
+        {
+            if (row[ii - 1] != ii)
+                return false;
+        }
+
+        return true;
     }
 };
 
