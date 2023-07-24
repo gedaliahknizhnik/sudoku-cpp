@@ -10,6 +10,7 @@ set(CMAKE_CXX_STANDARD 17)
 # Find packages go here.
 
 # You should usually split this into folders, but this is a simple example
+include_directories(include)
 
 # This is a "default" library, and will match the *** variable setting.
 # Other common choices are STATIC, SHARED, and MODULE
