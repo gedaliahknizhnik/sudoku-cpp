@@ -33,11 +33,6 @@ class SudokuBoard {
     // Copy constructor (note that this is a deep copy)
     SudokuBoard(const SudokuBoard &board);
 
-    // Overload access operator.
-    //  - SudokuBoard[x] will return a std::array reference.
-    //  - SudokuBoard[x][y] will return a reference to a single int entry.
-    rowType &operator[](int index);
-
     // Overloaded print operation.
     friend std::ostream &operator<<(std::ostream &out, SudokuBoard &board);
 

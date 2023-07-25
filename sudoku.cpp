@@ -38,7 +38,7 @@ SudokuBoard::SudokuBoard(const SudokuBoard &board)
 // Overloaded print operation.
 std::ostream &operator<<(std::ostream &out, SudokuBoard &board) {
     for (int ii{0}; ii < N; ++ii) {
-        std::cout << board[ii] << "\n";
+        std::cout << board.grid_.row(ii) << "\n";
     }
 
     return out;
@@ -114,7 +114,7 @@ bool SudokuBoard::is_empty(int linearInd) {
 bool SudokuBoard::is_puzzle_valid() {
     // Check for invalid ROWS
     for (int ii{0}; ii < N; ++ii) {
-        if (!is_array_valid(grid_.row(ii)))
+        if (!is_array_valid(grid_.row(ii).reshaped(9, 1)))
             return false;
     }
 
