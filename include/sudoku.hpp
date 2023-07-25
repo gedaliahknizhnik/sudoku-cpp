@@ -8,6 +8,8 @@
 #include <iostream>
 #include <numeric>
 
+#include "eigen3/Eigen/Geometry"
+
 // TODO: Check for valid puzzle before starting
 // TODO: Efficiency upgrades (std::array copying, etc.)
 //  TODO: Use iterators to go over the columns and squares.
@@ -17,8 +19,8 @@
 constexpr int N{9};
 constexpr int BOARDSUM{45 * N};
 
-using rowType = std::array<int, N>;
-using gridType = std::array<rowType, N>;
+using rowType = Eigen::Matrix<int, 9, 1>;
+using gridType = Eigen::Matrix<int, 9, 1>;
 
 // Overload print operator for std::array
 std::ostream &operator<<(std::ostream &out, rowType row);
@@ -60,7 +62,7 @@ class SudokuBoard {
     bool solve_puzzle(int linearInd);
 
    private:
-    gridType grid{};
+    gridType grid_{};
 
     // Generate the initial board. Currently just a static puzzle.
     void generate_sudoku_board();
@@ -69,7 +71,7 @@ class SudokuBoard {
     int ind_to_col(int x);  // Convert linear index to col index
 
     // Guess using linear index
-    void guess_at_ind(int linearInd, int guess);
+    void guess_at_ind(const int linearInd, const int guess);
 
     // Check for a valid array
     static bool is_array_valid(rowType row);

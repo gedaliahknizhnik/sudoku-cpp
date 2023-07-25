@@ -13,9 +13,6 @@
 // TODO: Reading in files?
 // TODO: Check for unneeded functions
 
-using rowType = std::array<int, N>;
-using gridType = std::array<rowType, N>;
-
 // Overload print operator for std::array
 std::ostream &operator<<(std::ostream &out, rowType row) {
     std::cout << "[ ";
@@ -35,14 +32,7 @@ SudokuBoard::SudokuBoard() {
 
 // Copy constructor (note that this is a deep copy)
 SudokuBoard::SudokuBoard(const SudokuBoard &board)
-    : grid{board.grid} {
-}
-
-// Overload access operator.
-//  - SudokuBoard[x] will return a std::array reference.
-//  - SudokuBoard[x][y] will return a reference to a single int entry.
-rowType &SudokuBoard::operator[](int index) {
-    return grid[index];
+    : grid_{board.grid_} {
 }
 
 // Overloaded print operation.
@@ -56,11 +46,7 @@ std::ostream &operator<<(std::ostream &out, SudokuBoard &board) {
 
 // Extract column as std::array
 rowType SudokuBoard::get_column(int x) {
-    rowType col{};
-    for (int jj{0}; jj < N; ++jj) {
-        col[jj] = grid[jj][x];
-    }
-    return col;
+    return grid_.col(x);
 }
 
 // Extract square as std::array
@@ -71,7 +57,7 @@ rowType SudokuBoard::get_square(int x, int y) {
     // FIXME: Use of number 3
     for (int ii{0}; ii < 3; ++ii) {
         for (int jj{0}; jj < 3; ++jj) {
-            square[index++] = grid[3 * x + ii][3 * y + jj];
+            square[index++] = grid_(3 * x + ii, 3 * y + jj);
         }
     }
     return square;
@@ -88,7 +74,7 @@ bool SudokuBoard::is_guess_valid(int linearInd, int guess) {
     assert(guess > 0 && guess <= 9);
 
     // Check if guess exists in row
-    auto row{grid[ind_to_row(linearInd)]};
+    auto row{grid_.row(ind_to_row(linearInd))};
     auto itR{std::find(row.begin(), row.end(), guess)};
 
     if (itR != row.end()) {
@@ -118,7 +104,7 @@ bool SudokuBoard::is_guess_valid(int linearInd, int guess) {
 
 // Check if a cell is empty.
 bool SudokuBoard::is_empty(int row, int col) {
-    return grid[row][col] == 0;
+    return grid_(row, col) == 0;
 }
 bool SudokuBoard::is_empty(int linearInd) {
     return is_empty(ind_to_row(linearInd), ind_to_col(linearInd));
@@ -128,7 +114,7 @@ bool SudokuBoard::is_empty(int linearInd) {
 bool SudokuBoard::is_puzzle_valid() {
     // Check for invalid ROWS
     for (int ii{0}; ii < N; ++ii) {
-        if (!is_array_valid(grid[ii]))
+        if (!is_array_valid(grid_.row(ii)))
             return false;
     }
 
@@ -210,7 +196,7 @@ void SudokuBoard::generate_sudoku_board() {
 
     for (int ii{0}; ii < N; ++ii) {
         for (int jj{0}; jj < N; ++jj) {
-            grid[ii][jj] = sampleGrid[ii][jj];
+            grid_(ii, jj) = sampleGrid[ii][jj];
         }
     }
 }
@@ -228,8 +214,8 @@ int SudokuBoard::ind_to_col(int x) {
 }
 
 // Guess using linear index
-void SudokuBoard::guess_at_ind(int linearInd, int guess) {
-    grid[ind_to_row(linearInd)][ind_to_col(linearInd)] = guess;
+void SudokuBoard::guess_at_ind(const int linearInd, const int guess) {
+    grid_(ind_to_row(linearInd), ind_to_col(linearInd)) = guess;
 }
 
 // Check for a valid array TODO: Should this be const by reference?
