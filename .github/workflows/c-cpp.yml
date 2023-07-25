@@ -1,0 +1,19 @@
+name: C/C++ CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: build dir
+      run: mkdir build
+    - name: cmake configure
+      run: cmake -B build -S .
+    - name: cmake
+      run: cmake --build build --parallel
