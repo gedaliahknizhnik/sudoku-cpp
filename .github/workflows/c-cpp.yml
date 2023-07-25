@@ -13,10 +13,8 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: cd build
-      run: mkdir build && cd build
     - name: cmake
-      run: cmake ..
+      run: cmake --build build --parallel
     - name: make
       run: make
     - name: make check
