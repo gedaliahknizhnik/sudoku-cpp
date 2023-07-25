@@ -2,9 +2,7 @@ name: C/C++ CI
 
 on:
   push:
-    branches: [ "feature/CMake" ]
   pull_request:
-    branches: [ "feature/CMake" ]
 
 jobs:
   build:
@@ -19,9 +17,3 @@ jobs:
       run: cmake -B build -S .
     - name: cmake
       run: cmake --build build --parallel
-    - name: make
-      run: make
-    - name: make check
-      run: make check
-    - name: make distcheck
-      run: make distcheck
