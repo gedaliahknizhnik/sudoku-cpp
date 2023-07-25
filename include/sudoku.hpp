@@ -40,39 +40,39 @@ class SudokuBoard {
     friend std::ostream &operator<<(std::ostream &out, SudokuBoard &board);
 
     // Extract column as std::array
-    rowType getColumn(int x);
+    rowType get_column(int x);
 
     // Extract square as std::array
-    rowType getSquare(int x, int y);
-    rowType getSquare(int linearInd);
+    rowType get_square(int x, int y);
+    rowType get_square(int linearInd);
 
     // Check if a guess is valid
-    bool isGuessValid(int linearInd, int guess);
+    bool is_guess_valid(int linearInd, int guess);
     // Check if a cell is empty.
-    bool isEmpty(int row, int col);
-    bool isEmpty(int linearInd);
+    bool is_empty(int row, int col);
+    bool is_empty(int linearInd);
 
     // Check for a complete and winning puzzle
-    bool isPuzzleValid();
+    bool is_puzzle_valid();
 
     // Solve the puzzle
-    bool solvePuzzle();
-    bool solvePuzzle(int linearInd);
+    bool solve_puzzle();
+    bool solve_puzzle(int linearInd);
 
    private:
     gridType grid{};
 
     // Generate the initial board. Currently just a static puzzle.
-    void generateSudokuBoard();
+    void generate_sudoku_board();
 
-    int indToRow(int x);  // Convert linear index to row index
-    int indToCol(int x);  // Convert linear index to col index
+    int ind_to_row(int x);  // Convert linear index to row index
+    int ind_to_col(int x);  // Convert linear index to col index
 
     // Guess using linear index
-    void guessAtInd(int linearInd, int guess);
+    void guess_at_ind(int linearInd, int guess);
 
     // Check for a valid array
-    static bool isArrayValid(rowType row);
+    static bool is_array_valid(rowType row);
 };
 
 #endif

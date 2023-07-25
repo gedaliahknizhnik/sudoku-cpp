@@ -10,7 +10,7 @@ int main() {
               << s << "\n";
     std::cout << "Solving puzzle...\n";
 
-    bool success{s.solvePuzzle()};
+    bool success{s.solve_puzzle()};
 
     if (success) {
         std::cout << "Solved the puzzle!\n"
