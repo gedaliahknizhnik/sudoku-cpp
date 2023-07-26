@@ -20,7 +20,7 @@ constexpr int N{9};
 constexpr int BOARDSUM{45 * N};
 
 using rowType = Eigen::Matrix<int, 9, 1>;
-using gridType = Eigen::Matrix<int, 9, 1>;
+using gridType = Eigen::Matrix<int, 9, 9>;
 
 // Overload print operator for std::array
 std::ostream &operator<<(std::ostream &out, rowType row);
