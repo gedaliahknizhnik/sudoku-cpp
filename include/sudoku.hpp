@@ -19,11 +19,11 @@
 constexpr int N{9};
 constexpr int BOARDSUM{45 * N};
 
-using rowType = Eigen::Matrix<int, 9, 1>;
-using gridType = Eigen::Matrix<int, 9, 9>;
+using row_t = Eigen::Matrix<int, 9, 1>;
+using grid_t = Eigen::Matrix<int, 9, 9>;
 
 // Overload print operator for std::array
-std::ostream &operator<<(std::ostream &out, rowType row);
+std::ostream &operator<<(std::ostream &out, row_t row);
 
 class SudokuBoard {
    public:
@@ -37,11 +37,11 @@ class SudokuBoard {
     friend std::ostream &operator<<(std::ostream &out, SudokuBoard &board);
 
     // Extract column as std::array
-    rowType get_column(int x);
+    row_t get_column(int x);
 
     // Extract square as std::array
-    rowType get_square(int x, int y);
-    rowType get_square(int linearInd);
+    row_t get_square(int x, int y);
+    row_t get_square(int linearInd);
 
     // Check if a guess is valid
     bool is_guess_valid(int linearInd, int guess);
@@ -57,7 +57,7 @@ class SudokuBoard {
     bool solve_puzzle(int linearInd);
 
    private:
-    gridType grid_{};
+    grid_t grid_{};
 
     // Generate the initial board. Currently just a static puzzle.
     void generate_sudoku_board();
@@ -69,7 +69,7 @@ class SudokuBoard {
     void guess_at_ind(const int linearInd, const int guess);
 
     // Check for a valid array
-    static bool is_array_valid(rowType row);
+    static bool is_array_valid(row_t row);
 };
 
 #endif

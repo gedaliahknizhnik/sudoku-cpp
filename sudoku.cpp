@@ -14,7 +14,7 @@
 // TODO: Check for unneeded functions
 
 // Overload print operator for std::array
-std::ostream &operator<<(std::ostream &out, rowType row) {
+std::ostream &operator<<(std::ostream &out, row_t row) {
     std::cout << "[ ";
     for (auto x : row) {
         std::cout << x << " ";
@@ -45,13 +45,13 @@ std::ostream &operator<<(std::ostream &out, SudokuBoard &board) {
 }
 
 // Extract column as std::array
-rowType SudokuBoard::get_column(int x) {
+row_t SudokuBoard::get_column(int x) {
     return grid_.col(x);
 }
 
 // Extract square as std::array
-rowType SudokuBoard::get_square(int x, int y) {
-    rowType square{};
+row_t SudokuBoard::get_square(int x, int y) {
+    row_t square{};
     int index{0};
 
     // FIXME: Use of number 3
@@ -62,7 +62,7 @@ rowType SudokuBoard::get_square(int x, int y) {
     }
     return square;
 }
-rowType SudokuBoard::get_square(int linearInd) {
+row_t SudokuBoard::get_square(int linearInd) {
     int row{ind_to_row(linearInd)};
     int col{ind_to_col(linearInd)};
 
@@ -219,7 +219,7 @@ void SudokuBoard::guess_at_ind(const int linearInd, const int guess) {
 }
 
 // Check for a valid array TODO: Should this be const by reference?
-bool SudokuBoard::is_array_valid(rowType row) {
+bool SudokuBoard::is_array_valid(row_t row) {
     std::sort(row.begin(), row.end());
     for (int ii{1}; ii <= N; ++ii) {
         if (row[ii - 1] != ii)
