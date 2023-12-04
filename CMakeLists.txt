@@ -8,20 +8,28 @@ project(
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Find packages go here.
-find_package(Eigen3)
+## FLAGS #######################################################################
 
-# You should usually split this into folders, but this is a simple example
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
+## INCLUDES ####################################################################
+
+find_package(Eigen3 REQUIRED)
+
 include_directories(include)
 
-# This is a "default" library, and will match the *** variable setting.
-# Other common choices are STATIC, SHARED, and MODULE
-# Including header files here helps IDEs but is not required.
-# Output libname matches target name, with the usual extensions on your system
-add_library(sudoku_lib SHARED sudoku.cpp include/sudoku.hpp)
+## SUDOKU LIBRARY ##############################################################
+
+add_library(sudoku_lib src/sudoku.cpp include/sudoku.hpp)
 target_link_libraries(sudoku_lib Eigen3::Eigen)
 
 ## EXAMPLES ####################################################################
 
 add_executable(example_sudoku src/sudoku_example.cpp)
-target_link_libraries(sudoku sudoku_lib)
+target_link_libraries(example_sudoku sudoku_lib)
