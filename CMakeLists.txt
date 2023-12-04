@@ -6,23 +6,28 @@ project(
     LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-# Find packages go here.
+## FLAGS #######################################################################
+
+if(NOT CMAKE_BUILD_TYPE)
+  set(CMAKE_BUILD_TYPE Release)
+endif()
+
+set(CMAKE_CXX_FLAGS "-Wall -Wextra")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O3")
+
+## INCLUDES ####################################################################
 
 # You should usually split this into folders, but this is a simple example
 include_directories(include)
 
-# This is a "default" library, and will match the *** variable setting.
-# Other common choices are STATIC, SHARED, and MODULE
-# Including header files here helps IDEs but is not required.
-# Output libname matches target name, with the usual extensions on your system
-add_library(sudoku_lib sudoku.cpp include/sudoku.hpp)
+## SUDOKU LIBRARY ##############################################################
 
-# Link each target with other targets or add options, etc.
+add_library(sudoku_lib src/sudoku.cpp include/sudoku.hpp)
 
-# Adding something we can run - Output name matches target name
-add_executable(sudoku sudoku_example.cpp)
+## EXAMPLES ####################################################################
 
-# Make sure you link your targets with this command. It can also link libraries and
-# even flags, so linking a target that does not exist will not give a configure-time error.
-target_link_libraries(sudoku PRIVATE sudoku_lib)
+add_executable(example_sudoku src/sudoku_example.cpp)
+target_link_libraries(sudoku sudoku_lib)
