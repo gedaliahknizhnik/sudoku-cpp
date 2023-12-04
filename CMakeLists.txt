@@ -6,6 +6,7 @@ project(
     LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 # Find packages go here.
 find_package(Eigen3)
@@ -20,9 +21,7 @@ include_directories(include)
 add_library(sudoku_lib SHARED sudoku.cpp include/sudoku.hpp)
 target_link_libraries(sudoku_lib Eigen3::Eigen)
 
-# Adding something we can run - Output name matches target name
-add_executable(sudoku sudoku_example.cpp)
+## EXAMPLES ####################################################################
 
-# Make sure you link your targets with this command. It can also link libraries and
-# even flags, so linking a target that does not exist will not give a configure-time error.
-target_link_libraries(sudoku PRIVATE sudoku_lib)
+add_executable(example_sudoku src/sudoku_example.cpp)
+target_link_libraries(sudoku sudoku_lib)
