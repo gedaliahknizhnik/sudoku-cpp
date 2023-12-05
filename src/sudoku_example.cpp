@@ -6,8 +6,6 @@
 int main(int argc, char *argv[]) {
   std::string puzzle_file{};
 
-  printf("Sudoku time...\n\n");
-
   if (argc == 1) {
     printf("You didn't specify a puzzle... :( \n");
     printf("Please pass me a path to the puzzle file!\n");
@@ -16,6 +14,9 @@ int main(int argc, char *argv[]) {
   } else {
     puzzle_file = argv[1];
   }
+
+  printf("Sudoku time...\n");
+  printf("==============\n");
 
   auto puzzle{std::make_shared<SudokuBoard>(puzzle_file)};
   SudokuSolverBacktracking backtracker{puzzle};

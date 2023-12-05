@@ -5,6 +5,8 @@
 #include <cassert>
 #include <fstream>
 #include <iostream>
+#include <sstream>
+#include <string>
 
 // TODO: Check for valid puzzle before starting
 // TODO: Efficiency upgrades (std::array copying, etc.)
@@ -139,14 +141,28 @@ bool SudokuBoard::is_puzzle_valid() {
 }
 
 void SudokuBoard::load_board_from_file(const std::string file_name) {
-  std::cout << "file: " << file_name << "\n";
   std::ifstream puzzle_file;
   puzzle_file.open(file_name);
 
+  // Check that the puzzle file exists
   if (!puzzle_file) {
     std::string msg{"Couldn't fine file " + file_name +
                     ", so we can't play Sudoku..."};
     throw std::runtime_error(msg);
+  }
+
+  std::string line, word, temp;
+
+  int row{0};
+
+  while (std::getline(puzzle_file, line)) {
+    int col{0};
+
+    std::stringstream s{line};
+    while (getline(s, word, ',')) {  // Split the line into words by comma
+      _grid[row][col++] = std::stoi(word);
+    }
+    ++row;
   }
 }
 // Generate the initial board. Currently just a static puzzle.
