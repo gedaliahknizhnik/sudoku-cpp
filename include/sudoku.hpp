@@ -21,8 +21,7 @@ std::ostream &operator<<(std::ostream &out, rowType row);
 
 class SudokuBoard {
  public:
-  // Standard constructor (calls generateSudokuBoard)
-  SudokuBoard();
+  SudokuBoard(const std::string file_name);
 
   // Copy constructor (note that this is a deep copy)
   SudokuBoard(const SudokuBoard &board);
@@ -59,6 +58,7 @@ class SudokuBoard {
 
   // Generate the initial board. Currently just a static puzzle.
   void generate_sudoku_board();
+  void load_board_from_file(const std::string file_name);
 
   int ind_to_row(int x);  // Convert linear index to row index
   int ind_to_col(int x);  // Convert linear index to col index

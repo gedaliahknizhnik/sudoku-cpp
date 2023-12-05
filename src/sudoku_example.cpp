@@ -1,12 +1,23 @@
 #include <memory>
+#include <string>
 
 #include "sudoku_solver_backtracking.hpp"
 
-int main() {
-  std::cout << "Sudoku time..."
-            << "\n\n";
+int main(int argc, char *argv[]) {
+  std::string puzzle_file{};
 
-  auto puzzle{std::make_shared<SudokuBoard>()};
+  printf("Sudoku time...\n\n");
+
+  if (argc == 1) {
+    printf("You didn't specify a puzzle... :( \n");
+    printf("Please pass me a path to the puzzle file!\n");
+    return 1;
+
+  } else {
+    puzzle_file = argv[1];
+  }
+
+  auto puzzle{std::make_shared<SudokuBoard>(puzzle_file)};
   SudokuSolverBacktracking backtracker{puzzle};
 
   std::cout << "Starting puzzle: \n" << *puzzle << "\n";

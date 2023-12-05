@@ -3,6 +3,7 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
+#include <fstream>
 #include <iostream>
 
 // TODO: Check for valid puzzle before starting
@@ -26,7 +27,9 @@ std::ostream &operator<<(std::ostream &out, rowType row) {
 }
 
 // Standard constructor
-SudokuBoard::SudokuBoard() { generate_sudoku_board(); }
+SudokuBoard::SudokuBoard(const std::string file_name) {
+  load_board_from_file(file_name);
+}
 
 // Copy constructor (note that this is a deep copy)
 SudokuBoard::SudokuBoard(const SudokuBoard &board) : _grid{board._grid} {}
@@ -135,18 +138,20 @@ bool SudokuBoard::is_puzzle_valid() {
   return true;
 }
 
+void SudokuBoard::load_board_from_file(const std::string file_name) {
+  std::cout << "file: " << file_name << "\n";
+  std::ifstream puzzle_file;
+  puzzle_file.open(file_name);
+
+  if (!puzzle_file) {
+    std::string msg{"Couldn't fine file " + file_name +
+                    ", so we can't play Sudoku..."};
+    throw std::runtime_error(msg);
+  }
+}
 // Generate the initial board. Currently just a static puzzle.
 void SudokuBoard::generate_sudoku_board() {
   // Easy Puzzle to solve
-  // int sampleGrid[N][N] = {{0, 6, 2, 0, 3, 7, 5, 0, 0},
-  //                         {0, 8, 5, 0, 0, 2, 0, 6, 0},
-  //                         {0, 0, 4, 0, 0, 0, 0, 0, 0},
-  //                         {0, 0, 6, 0, 8, 3, 0, 0, 1},
-  //                         {0, 0, 3, 0, 1, 9, 4, 8, 0},
-  //                         {0, 0, 0, 5, 0, 4, 6, 9, 0},
-  //                         {0, 2, 7, 0, 0, 0, 9, 4, 5},
-  //                         {0, 4, 9, 0, 2, 0, 0, 3, 8},
-  //                         {5, 0, 0, 4, 9, 8, 0, 0, 6}};
 
   // Medium Puzzle to solve
   // int sampleGrid[N][N] = {{4, 0, 0, 0, 1, 0, 0, 8, 0},
@@ -223,5 +228,3 @@ bool SudokuBoard::is_array_valid(rowType row) {
 
   return true;
 }
-
-
