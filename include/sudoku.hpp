@@ -4,7 +4,7 @@
 #include <array>
 #include <iostream>
 
-// TODO: Check for valid puzzle before starting
+// #include "sudoku_solver.hpp"
 // TODO: Efficiency upgrades (std::array copying, etc.)
 //  TODO: Use iterators to go over the columns and squares.
 // TODO: Reading in files?
@@ -51,21 +51,17 @@ class SudokuBoard {
   // Check for a complete and winning puzzle
   bool is_puzzle_valid();
 
-  // Solve the puzzle
-  bool solve_puzzle();
-  bool solve_puzzle(int linearInd);
+  // Guess using linear index
+  void guess_at_ind(int linearInd, int guess);
 
  private:
-  gridType grid{};
+  gridType _grid{};
 
   // Generate the initial board. Currently just a static puzzle.
   void generate_sudoku_board();
 
   int ind_to_row(int x);  // Convert linear index to row index
   int ind_to_col(int x);  // Convert linear index to col index
-
-  // Guess using linear index
-  void guess_at_ind(int linearInd, int guess);
 
   // Check for a valid array
   static bool is_array_valid(rowType row);

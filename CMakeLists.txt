@@ -29,7 +29,13 @@ include_directories(include)
 add_library(sudoku_lib src/sudoku.cpp include/sudoku.hpp)
 target_link_libraries(sudoku_lib Eigen3::Eigen)
 
+add_library(sudoku_solver_backtracking 
+  src/sudoku_solver_backtracking.cpp
+  include/sudoku_solver_backtracking.hpp
+)
+target_link_libraries(sudoku_solver_backtracking sudoku_lib)
+
 ## EXAMPLES ####################################################################
 
 add_executable(example_sudoku src/sudoku_example.cpp)
-target_link_libraries(example_sudoku sudoku_lib)
+target_link_libraries(example_sudoku sudoku_lib sudoku_solver_backtracking)

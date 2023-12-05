@@ -29,12 +29,12 @@ std::ostream &operator<<(std::ostream &out, rowType row) {
 SudokuBoard::SudokuBoard() { generate_sudoku_board(); }
 
 // Copy constructor (note that this is a deep copy)
-SudokuBoard::SudokuBoard(const SudokuBoard &board) : grid{board.grid} {}
+SudokuBoard::SudokuBoard(const SudokuBoard &board) : _grid{board._grid} {}
 
 // Overload access operator.
 //  - SudokuBoard[x] will return a std::array reference.
 //  - SudokuBoard[x][y] will return a reference to a single int entry.
-rowType &SudokuBoard::operator[](int index) { return grid[index]; }
+rowType &SudokuBoard::operator[](int index) { return _grid[index]; }
 
 // Overloaded print operation.
 std::ostream &operator<<(std::ostream &out, SudokuBoard &board) {
@@ -49,7 +49,7 @@ std::ostream &operator<<(std::ostream &out, SudokuBoard &board) {
 rowType SudokuBoard::get_column(int x) {
   rowType col{};
   for (int jj{0}; jj < N; ++jj) {
-    col[jj] = grid[jj][x];
+    col[jj] = _grid[jj][x];
   }
   return col;
 }
@@ -61,7 +61,7 @@ rowType SudokuBoard::get_square(int x, int y) {
 
   for (int ii{0}; ii < 3; ++ii) {
     for (int jj{0}; jj < 3; ++jj) {
-      square[index++] = grid[3 * x + ii][3 * y + jj];
+      square[index++] = _grid[3 * x + ii][3 * y + jj];
     }
   }
   return square;
@@ -78,7 +78,7 @@ bool SudokuBoard::is_guess_valid(int linearInd, int guess) {
   assert(guess > 0 && guess <= 9);
 
   // Check if guess exists in row
-  auto row{grid[ind_to_row(linearInd)]};
+  auto row{_grid[ind_to_row(linearInd)]};
   auto itR{std::find(row.begin(), row.end(), guess)};
 
   if (itR != row.end()) {
@@ -107,7 +107,7 @@ bool SudokuBoard::is_guess_valid(int linearInd, int guess) {
 }
 
 // Check if a cell is empty.
-bool SudokuBoard::is_empty(int row, int col) { return grid[row][col] == 0; }
+bool SudokuBoard::is_empty(int row, int col) { return _grid[row][col] == 0; }
 bool SudokuBoard::is_empty(int linearInd) {
   return is_empty(ind_to_row(linearInd), ind_to_col(linearInd));
 }
@@ -116,7 +116,7 @@ bool SudokuBoard::is_empty(int linearInd) {
 bool SudokuBoard::is_puzzle_valid() {
   // Check for invalid ROWS
   for (int ii{0}; ii < N; ++ii) {
-    if (!is_array_valid(grid[ii])) return false;
+    if (!is_array_valid(_grid[ii])) return false;
   }
 
   // Check for invalid COLUMNS
@@ -192,7 +192,7 @@ void SudokuBoard::generate_sudoku_board() {
 
   for (int ii{0}; ii < N; ++ii) {
     for (int jj{0}; jj < N; ++jj) {
-      grid[ii][jj] = sampleGrid[ii][jj];
+      _grid[ii][jj] = sampleGrid[ii][jj];
     }
   }
 }
@@ -211,7 +211,7 @@ int SudokuBoard::ind_to_col(int x) {
 
 // Guess using linear index
 void SudokuBoard::guess_at_ind(int linearInd, int guess) {
-  grid[ind_to_row(linearInd)][ind_to_col(linearInd)] = guess;
+  _grid[ind_to_row(linearInd)][ind_to_col(linearInd)] = guess;
 }
 
 // Check for a valid array TODO: Should this be const by reference?
@@ -224,47 +224,4 @@ bool SudokuBoard::is_array_valid(rowType row) {
   return true;
 }
 
-bool SudokuBoard::solve_puzzle(int linearInd) {
-  // std::cout << *this << "\n";
 
-  // Find the first empty slot starting at linearInd.
-  while (linearInd < N * N && !is_empty(linearInd)) {
-    ++linearInd;
-  }
-
-  // If empty slot is past puzzle boundary - we won!
-  if (linearInd >= N * N) {
-    return true;
-  }
-
-  bool success{0};
-
-  // Try guessing the value at that slot
-  for (int guess{1}; guess <= 9; ++guess) {
-    // std::cout << "Guessing at index " << linearInd << ", value " << guess;
-
-    // Check if the guess is valid
-    if (!is_guess_valid(linearInd, guess)) {
-      // std::cout << ", which isn't valid.\n";
-      continue;
-    }
-
-    // std::cout << ", which is valid!\n";
-
-    // If it is a valid guess - try it.
-    guess_at_ind(linearInd, guess);
-    success = solve_puzzle(linearInd + 1);
-    if (success) {
-      return true;
-    }
-  }
-
-  // If we got to the end - there is no valid guess here that works.
-  //  - Reset the slot to 0 (empty)
-  //  - Backtrace by returning false.
-  guess_at_ind(linearInd, 0);
-  // std::cout << "\t Resetting index " << linearInd << "\n";
-  return false;
-}
-
-bool SudokuBoard::solve_puzzle() { return solve_puzzle(0); }
