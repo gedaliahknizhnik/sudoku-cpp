@@ -1,12 +1,8 @@
 #ifndef SUDOKU_HPP
 #define SUDOKU_HPP
 
-#include <algorithm>
 #include <array>
-#include <cassert>
-#include <functional>
 #include <iostream>
-#include <numeric>
 
 // TODO: Check for valid puzzle before starting
 // TODO: Efficiency upgrades (std::array copying, etc.)
@@ -24,55 +20,55 @@ using gridType = std::array<rowType, N>;
 std::ostream &operator<<(std::ostream &out, rowType row);
 
 class SudokuBoard {
-   public:
-    // Standard constructor (calls generateSudokuBoard)
-    SudokuBoard();
+ public:
+  // Standard constructor (calls generateSudokuBoard)
+  SudokuBoard();
 
-    // Copy constructor (note that this is a deep copy)
-    SudokuBoard(const SudokuBoard &board);
+  // Copy constructor (note that this is a deep copy)
+  SudokuBoard(const SudokuBoard &board);
 
-    // Overload access operator.
-    //  - SudokuBoard[x] will return a std::array reference.
-    //  - SudokuBoard[x][y] will return a reference to a single int entry.
-    rowType &operator[](int index);
+  // Overload access operator.
+  //  - SudokuBoard[x] will return a std::array reference.
+  //  - SudokuBoard[x][y] will return a reference to a single int entry.
+  rowType &operator[](int index);
 
-    // Overloaded print operation.
-    friend std::ostream &operator<<(std::ostream &out, SudokuBoard &board);
+  // Overloaded print operation.
+  friend std::ostream &operator<<(std::ostream &out, SudokuBoard &board);
 
-    // Extract column as std::array
-    rowType get_column(int x);
+  // Extract column as std::array
+  rowType get_column(int x);
 
-    // Extract square as std::array
-    rowType get_square(int x, int y);
-    rowType get_square(int linearInd);
+  // Extract square as std::array
+  rowType get_square(int x, int y);
+  rowType get_square(int linearInd);
 
-    // Check if a guess is valid
-    bool is_guess_valid(int linearInd, int guess);
-    // Check if a cell is empty.
-    bool is_empty(int row, int col);
-    bool is_empty(int linearInd);
+  // Check if a guess is valid
+  bool is_guess_valid(int linearInd, int guess);
+  // Check if a cell is empty.
+  bool is_empty(int row, int col);
+  bool is_empty(int linearInd);
 
-    // Check for a complete and winning puzzle
-    bool is_puzzle_valid();
+  // Check for a complete and winning puzzle
+  bool is_puzzle_valid();
 
-    // Solve the puzzle
-    bool solve_puzzle();
-    bool solve_puzzle(int linearInd);
+  // Solve the puzzle
+  bool solve_puzzle();
+  bool solve_puzzle(int linearInd);
 
-   private:
-    gridType grid{};
+ private:
+  gridType grid{};
 
-    // Generate the initial board. Currently just a static puzzle.
-    void generate_sudoku_board();
+  // Generate the initial board. Currently just a static puzzle.
+  void generate_sudoku_board();
 
-    int ind_to_row(int x);  // Convert linear index to row index
-    int ind_to_col(int x);  // Convert linear index to col index
+  int ind_to_row(int x);  // Convert linear index to row index
+  int ind_to_col(int x);  // Convert linear index to col index
 
-    // Guess using linear index
-    void guess_at_ind(int linearInd, int guess);
+  // Guess using linear index
+  void guess_at_ind(int linearInd, int guess);
 
-    // Check for a valid array
-    static bool is_array_valid(rowType row);
+  // Check for a valid array
+  static bool is_array_valid(rowType row);
 };
 
 #endif
