@@ -56,8 +56,6 @@ class SudokuBoard {
  private:
   gridType _grid{};
 
-  // Generate the initial board. Currently just a static puzzle.
-  void generate_sudoku_board();
   void load_board_from_file(const std::string file_name);
 
   int ind_to_row(int x);  // Convert linear index to row index
