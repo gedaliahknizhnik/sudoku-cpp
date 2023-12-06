@@ -8,12 +8,6 @@
 #include <sstream>
 #include <string>
 
-// TODO: Check for valid puzzle before starting
-// TODO: Efficiency upgrades (std::array copying, etc.)
-//  TODO: Use iterators to go over the columns and squares.
-// TODO: Reading in files?
-// TODO: Check for unneeded functions
-
 using rowType = std::array<int, N>;
 using gridType = std::array<rowType, N>;
 

@@ -4,12 +4,6 @@
 #include <array>
 #include <iostream>
 
-// #include "sudoku_solver.hpp"
-// TODO: Efficiency upgrades (std::array copying, etc.)
-//  TODO: Use iterators to go over the columns and squares.
-// TODO: Reading in files?
-// TODO: Check for unneeded functions
-
 constexpr int N{9};
 constexpr int BOARDSUM{45 * N};
 
