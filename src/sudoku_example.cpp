@@ -21,8 +21,9 @@ int main(int argc, char *argv[]) {
   auto puzzle{std::make_shared<SudokuBoard>(puzzle_file)};
   SudokuSolverBacktracking backtracker{puzzle};
 
-  std::cout << "Starting puzzle: \n" << *puzzle << "\n";
-  std::cout << "Solving puzzle...\n";
+  printf("Starting puzzle:\n");
+  std::cout << *puzzle << "\n";
+  printf("Solving puzzle...\n");
 
   bool success{backtracker.solve_puzzle()};
 
