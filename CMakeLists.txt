@@ -47,5 +47,5 @@ target_link_libraries(sudoku_solver_backtracking sudoku_lib)
 
 ## EXAMPLES ####################################################################
 
-add_executable(example_sudoku src/sudoku_example.cpp)
-target_link_libraries(example_sudoku sudoku_lib sudoku_solver_backtracking)
+add_executable(solve src/sudoku_example.cpp)
+target_link_libraries(solve sudoku_lib sudoku_solver_backtracking)
