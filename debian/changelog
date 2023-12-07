@@ -1,0 +1,5 @@
+sudoku (0.9.0) jammy; urgency=medium
+
+  * Initial making public after cleanup and adding README.
+
+ -- Gedaliah Knizhnik <gedaliah.knizhnik@gmail.com>  Thu, 07 Dec 2023 14:34:42 -0500
