@@ -3,10 +3,10 @@
 #include <algorithm>
 #include <array>
 #include <cassert>
-#include <fstream>
 #include <iostream>
-#include <sstream>
 #include <string>
+
+#include "rapidcsv.h"
 
 using rowType = std::array<int, N>;
 using gridType = std::array<rowType, N>;
@@ -135,29 +135,17 @@ bool SudokuBoard::is_puzzle_valid() {
 }
 
 void SudokuBoard::load_board_from_file(const std::string file_name) {
-  std::ifstream puzzle_file;
-  puzzle_file.open(file_name);
+  rapidcsv::Document puzzle_doc(file_name, rapidcsv::LabelParams(-1, -1));
 
-  // Check that the puzzle file exists
-  if (!puzzle_file) {
-    std::string msg{"Couldn't fine file " + file_name +
-                    ", so we can't play Sudoku..."};
-    throw std::runtime_error(msg);
+  if (puzzle_doc.GetColumnCount() != 9) {
+    throw std::runtime_error("Puzzle file does not have 9 columns.");
+  } else if (puzzle_doc.GetRowCount() != 9) {
+    throw std::runtime_error("Puzzle file does not have 9 rows.");
   }
 
-  std::string line, word, temp;
-
-  int row{0};
-
-  while (std::getline(puzzle_file, line)) {
-    int col{0};
-
-    std::stringstream s{line};
-    while (getline(s, word, ',')) {  // Split the line into words by comma
-      std::cout << word << "\n";
-      _grid[row][col++] = std::stoi(word);
-    }
-    ++row;
+  for (int ii{0}; ii < 9; ++ii) {
+    std::vector<int> row = puzzle_doc.GetRow<int>(static_cast<size_t>(ii));
+    std::copy(row.begin(), row.end(), _grid[ii].begin());
   }
 }
 
