@@ -4,12 +4,6 @@
 #include <array>
 #include <iostream>
 
-// #include "sudoku_solver.hpp"
-// TODO: Efficiency upgrades (std::array copying, etc.)
-//  TODO: Use iterators to go over the columns and squares.
-// TODO: Reading in files?
-// TODO: Check for unneeded functions
-
 constexpr int N{9};
 constexpr int BOARDSUM{45 * N};
 
@@ -21,8 +15,7 @@ std::ostream &operator<<(std::ostream &out, rowType row);
 
 class SudokuBoard {
  public:
-  // Standard constructor (calls generateSudokuBoard)
-  SudokuBoard();
+  SudokuBoard(const std::string file_name);
 
   // Copy constructor (note that this is a deep copy)
   SudokuBoard(const SudokuBoard &board);
@@ -57,8 +50,7 @@ class SudokuBoard {
  private:
   gridType _grid{};
 
-  // Generate the initial board. Currently just a static puzzle.
-  void generate_sudoku_board();
+  void load_board_from_file(const std::string file_name);
 
   int ind_to_row(int x);  // Convert linear index to row index
   int ind_to_col(int x);  // Convert linear index to col index

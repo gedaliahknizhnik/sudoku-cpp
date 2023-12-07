@@ -4,12 +4,9 @@
 #include <array>
 #include <cassert>
 #include <iostream>
+#include <string>
 
-// TODO: Check for valid puzzle before starting
-// TODO: Efficiency upgrades (std::array copying, etc.)
-//  TODO: Use iterators to go over the columns and squares.
-// TODO: Reading in files?
-// TODO: Check for unneeded functions
+#include "rapidcsv.h"
 
 using rowType = std::array<int, N>;
 using gridType = std::array<rowType, N>;
@@ -26,7 +23,9 @@ std::ostream &operator<<(std::ostream &out, rowType row) {
 }
 
 // Standard constructor
-SudokuBoard::SudokuBoard() { generate_sudoku_board(); }
+SudokuBoard::SudokuBoard(const std::string file_name) {
+  load_board_from_file(file_name);
+}
 
 // Copy constructor (note that this is a deep copy)
 SudokuBoard::SudokuBoard(const SudokuBoard &board) : _grid{board._grid} {}
@@ -135,65 +134,18 @@ bool SudokuBoard::is_puzzle_valid() {
   return true;
 }
 
-// Generate the initial board. Currently just a static puzzle.
-void SudokuBoard::generate_sudoku_board() {
-  // Easy Puzzle to solve
-  // int sampleGrid[N][N] = {{0, 6, 2, 0, 3, 7, 5, 0, 0},
-  //                         {0, 8, 5, 0, 0, 2, 0, 6, 0},
-  //                         {0, 0, 4, 0, 0, 0, 0, 0, 0},
-  //                         {0, 0, 6, 0, 8, 3, 0, 0, 1},
-  //                         {0, 0, 3, 0, 1, 9, 4, 8, 0},
-  //                         {0, 0, 0, 5, 0, 4, 6, 9, 0},
-  //                         {0, 2, 7, 0, 0, 0, 9, 4, 5},
-  //                         {0, 4, 9, 0, 2, 0, 0, 3, 8},
-  //                         {5, 0, 0, 4, 9, 8, 0, 0, 6}};
+void SudokuBoard::load_board_from_file(const std::string file_name) {
+  rapidcsv::Document puzzle_doc(file_name, rapidcsv::LabelParams(-1, -1));
 
-  // Medium Puzzle to solve
-  // int sampleGrid[N][N] = {{4, 0, 0, 0, 1, 0, 0, 8, 0},
-  //                         {0, 0, 0, 0, 0, 0, 0, 0, 3},
-  //                         {9, 1, 7, 0, 0, 3, 0, 5, 0},
-  //                         {8, 0, 5, 0, 3, 0, 0, 0, 0},
-  //                         {1, 0, 0, 7, 0, 4, 0, 0, 0},
-  //                         {0, 7, 4, 0, 9, 0, 0, 0, 2},
-  //                         {2, 9, 0, 8, 7, 0, 0, 4, 5},
-  //                         {0, 0, 0, 2, 0, 0, 0, 0, 0},
-  //                         {5, 0, 0, 3, 0, 0, 7, 0, 6}};
+  if (puzzle_doc.GetColumnCount() != 9) {
+    throw std::runtime_error("Puzzle file does not have 9 columns.");
+  } else if (puzzle_doc.GetRowCount() != 9) {
+    throw std::runtime_error("Puzzle file does not have 9 rows.");
+  }
 
-  // Hard Puzzle to solve
-  int sampleGrid[N][N] = {
-      {0, 3, 0, 0, 0, 0, 9, 0, 0}, {0, 2, 7, 5, 0, 0, 6, 0, 3},
-      {6, 0, 9, 0, 1, 0, 0, 0, 0}, {0, 0, 0, 0, 0, 1, 0, 7, 0},
-      {3, 0, 0, 0, 8, 0, 0, 0, 0}, {1, 0, 5, 7, 0, 0, 0, 2, 0},
-      {0, 0, 0, 0, 0, 5, 8, 0, 0}, {0, 5, 0, 2, 4, 0, 0, 9, 0},
-      {0, 0, 0, 3, 0, 0, 0, 0, 0}};
-
-  // Super Hard Puzzle to solve (this is a worst case puzzle
-  //  because the first digit is a 9...)
-  // int sampleGrid[N][N] = {{0, 0, 0, 0, 0, 0, 0, 0, 0},
-  //                         {0, 0, 0, 0, 0, 3, 0, 8, 5},
-  //                         {0, 0, 1, 0, 2, 0, 0, 0, 0},
-  //                         {0, 0, 0, 5, 0, 7, 0, 0, 0},
-  //                         {0, 0, 4, 0, 0, 0, 1, 0, 0},
-  //                         {0, 9, 0, 0, 0, 0, 0, 0, 0},
-  //                         {5, 0, 0, 0, 0, 0, 0, 7, 3},
-  //                         {0, 0, 2, 0, 1, 0, 0, 0, 0},
-  //                         {0, 0, 0, 0, 4, 0, 0, 0, 9}};
-
-  // Solved puzzle
-  // int sampleGrid[N][N] = {{4, 3, 5, 2, 6, 9, 7, 8, 1},
-  //                         {6, 8, 2, 5, 7, 1, 4, 9, 3},
-  //                         {1, 9, 7, 8, 3, 4, 5, 6, 2},
-  //                         {8, 2, 6, 1, 9, 5, 3, 4, 7},
-  //                         {3, 7, 4, 6, 8, 2, 9, 1, 5},
-  //                         {9, 5, 1, 7, 4, 3, 6, 2, 8},
-  //                         {5, 1, 9, 3, 2, 6, 8, 7, 4},
-  //                         {2, 4, 8, 9, 5, 7, 1, 3, 6},
-  //                         {7, 6, 3, 4, 1, 8, 2, 5, 9}};
-
-  for (int ii{0}; ii < N; ++ii) {
-    for (int jj{0}; jj < N; ++jj) {
-      _grid[ii][jj] = sampleGrid[ii][jj];
-    }
+  for (int ii{0}; ii < 9; ++ii) {
+    std::vector<int> row = puzzle_doc.GetRow<int>(static_cast<size_t>(ii));
+    std::copy(row.begin(), row.end(), _grid[ii].begin());
   }
 }
 
@@ -223,5 +175,3 @@ bool SudokuBoard::is_array_valid(rowType row) {
 
   return true;
 }
-
-
