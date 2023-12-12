@@ -45,7 +45,7 @@ std::ostream &operator<<(std::ostream &out, SudokuBoard &board) {
 }
 
 // Extract column as std::array
-rowType SudokuBoard::get_column(const int x) {
+rowType SudokuBoard::get_column(const int x) const {
   rowType col{};
   for (int jj{0}; jj < N; ++jj) {
     col[jj] = _grid[jj][x];
@@ -54,7 +54,7 @@ rowType SudokuBoard::get_column(const int x) {
 }
 
 // Extract square as std::array
-rowType SudokuBoard::get_square(const int x, const int y) {
+rowType SudokuBoard::get_square(const int x, const int y) const {
   rowType square{};
   int index{0};
 
@@ -65,7 +65,7 @@ rowType SudokuBoard::get_square(const int x, const int y) {
   }
   return square;
 }
-rowType SudokuBoard::get_square(const int linearInd) {
+rowType SudokuBoard::get_square(const int linearInd) const {
   int row{ind_to_row(linearInd)};
   int col{ind_to_col(linearInd)};
 
@@ -73,7 +73,7 @@ rowType SudokuBoard::get_square(const int linearInd) {
 }
 
 // Check if a guess is valid
-bool SudokuBoard::is_guess_valid(const int linearInd, const int guess) {
+bool SudokuBoard::is_guess_valid(const int linearInd, const int guess) const {
   assert(guess > 0 && guess <= 9);
 
   // Check if guess exists in row
@@ -106,15 +106,15 @@ bool SudokuBoard::is_guess_valid(const int linearInd, const int guess) {
 }
 
 // Check if a cell is empty.
-bool SudokuBoard::is_empty(const int row, const int col) {
+bool SudokuBoard::is_empty(const int row, const int col) const {
   return _grid[row][col] == 0;
 }
-bool SudokuBoard::is_empty(const int linearInd) {
+bool SudokuBoard::is_empty(const int linearInd) const {
   return is_empty(ind_to_row(linearInd), ind_to_col(linearInd));
 }
 
 // Check for a complete and winning puzzle
-bool SudokuBoard::is_puzzle_valid() {
+bool SudokuBoard::is_puzzle_valid() const {
   // Check for invalid ROWS
   for (int ii{0}; ii < N; ++ii) {
     if (!is_array_valid(_grid[ii])) return false;
@@ -126,7 +126,6 @@ bool SudokuBoard::is_puzzle_valid() {
   }
 
   // Check for invalid SQUARES
-  // FIXME: Use of number 3
   for (int ii{0}; ii < 3; ++ii) {
     for (int jj{0}; jj < 3; ++jj) {
       if (!is_array_valid(get_square(ii, jj))) return false;
@@ -153,13 +152,13 @@ void SudokuBoard::load_board_from_file(const std::string_view file_name) {
 }
 
 // Convert linear index to row index
-int SudokuBoard::ind_to_row(const int x) {
+int SudokuBoard::ind_to_row(const int x) const {
   assert(x < N * N);
   return x / N;
 }
 
 // Convert linear index to col index
-int SudokuBoard::ind_to_col(const int x) {
+int SudokuBoard::ind_to_col(const int x) const {
   assert(x < N * N);
   return x % N;
 }

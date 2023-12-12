@@ -25,26 +25,26 @@ class SudokuBoard {
   //  - SudokuBoard[x] will return a std::array reference.
   //  - SudokuBoard[x][y] will return a reference to a single int entry.
   rowType &operator[](const int index);
-  rowType &operator[](const int index) const;
 
   // Overloaded print operation.
   friend std::ostream &operator<<(std::ostream &out, SudokuBoard &board);
 
   // Extract column as std::array
-  rowType get_column(const int x);
+  rowType get_column(const int x) const;
 
   // Extract square as std::array
-  rowType get_square(const int x, const int y);
-  rowType get_square(const int linearInd);
+  rowType get_square(const int x, const int y) const;
+  rowType get_square(const int linearInd) const;
 
   // Check if a guess is valid
-  bool is_guess_valid(const int linearInd, const int guess);
+  bool is_guess_valid(const int linearInd, const int guess) const;
+
   // Check if a cell is empty.
-  bool is_empty(const int row, const int col);
-  bool is_empty(const int linearInd);
+  bool is_empty(const int row, const int col) const;
+  bool is_empty(const int linearInd) const;
 
   // Check for a complete and winning puzzle
-  bool is_puzzle_valid();
+  bool is_puzzle_valid() const;
 
   // Guess using linear index
   void guess_at_ind(const int linearInd, const int guess);
@@ -54,8 +54,8 @@ class SudokuBoard {
 
   void load_board_from_file(const std::string_view file_name);
 
-  int ind_to_row(const int x);  // Convert linear index to row index
-  int ind_to_col(const int x);  // Convert linear index to col index
+  int ind_to_row(const int x) const;  // Convert linear index to row index
+  int ind_to_col(const int x) const;  // Convert linear index to col index
 
   // Check for a valid array
   static bool is_array_valid(rowType row);
