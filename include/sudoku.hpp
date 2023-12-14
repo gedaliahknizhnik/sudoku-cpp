@@ -44,7 +44,7 @@ class SudokuBoard {
   bool is_empty(const int linearInd) const;
 
   // Check for a complete and winning puzzle
-  bool is_puzzle_valid() const;
+  bool is_puzzle_valid(const bool for_win = false) const;
 
   // Guess using linear index
   void guess_at_ind(const int linearInd, const int guess);
@@ -58,7 +58,7 @@ class SudokuBoard {
   int ind_to_col(const int x) const;  // Convert linear index to col index
 
   // Check for a valid array
-  static bool is_array_valid(rowType row);
+  static bool is_array_valid(rowType row, const bool for_win);
 };
 
 #endif

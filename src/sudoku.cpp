@@ -114,21 +114,21 @@ bool SudokuBoard::is_empty(const int linearInd) const {
 }
 
 // Check for a complete and winning puzzle
-bool SudokuBoard::is_puzzle_valid() const {
+bool SudokuBoard::is_puzzle_valid(const bool for_win) const {
   // Check for invalid ROWS
   for (int ii{0}; ii < N; ++ii) {
-    if (!is_array_valid(_grid[ii])) return false;
+    if (!is_array_valid(_grid[ii], for_win)) return false;
   }
 
   // Check for invalid COLUMNS
   for (int ii{0}; ii < N; ++ii) {
-    if (!is_array_valid(get_column(ii))) return false;
+    if (!is_array_valid(get_column(ii), for_win)) return false;
   }
 
   // Check for invalid SQUARES
   for (int ii{0}; ii < 3; ++ii) {
     for (int jj{0}; jj < 3; ++jj) {
-      if (!is_array_valid(get_square(ii, jj))) return false;
+      if (!is_array_valid(get_square(ii, jj), for_win)) return false;
     }
   }
 
@@ -148,6 +148,10 @@ void SudokuBoard::load_board_from_file(const std::string_view file_name) {
   for (int ii{0}; ii < 9; ++ii) {
     std::vector<int> row = puzzle_doc.GetRow<int>(static_cast<size_t>(ii));
     std::copy(row.begin(), row.end(), _grid[ii].begin());
+  }
+
+  if (!is_puzzle_valid()) {
+    throw std::runtime_error("Puzzle file contains an invalid puzzle.");
   }
 }
 
@@ -169,11 +173,18 @@ void SudokuBoard::guess_at_ind(const int linearInd, const int guess) {
 }
 
 // Check for a valid array
-bool SudokuBoard::is_array_valid(rowType row) {
+bool SudokuBoard::is_array_valid(rowType row, const bool for_win) {
   std::sort(row.begin(), row.end());
-  for (int ii{1}; ii <= N; ++ii) {
-    if (row[ii - 1] != ii) return false;
+  if (for_win) {
+    for (int ii{1}; ii <= N; ++ii) {
+      if (row[ii - 1] != ii) return false;
+    }
+  } else {
+    int curr{-1};
+    for (int ii{0}; ii <= N; ++ii) {
+      if ((curr != 0) && (row[ii] == curr)) return false;
+      curr = row[ii];
+    }
   }
-
   return true;
 }
