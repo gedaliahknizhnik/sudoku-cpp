@@ -7,7 +7,7 @@
 #include <string>
 
 #include "rapidcsv.h"
-
+namespace sudoku {
 using rowType = std::array<int, N>;
 using gridType = std::array<rowType, N>;
 
@@ -188,3 +188,4 @@ bool SudokuBoard::is_array_valid(rowType row, const bool for_win) {
   }
   return true;
 }
+}  // namespace sudoku

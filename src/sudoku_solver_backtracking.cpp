@@ -1,6 +1,8 @@
 #include "sudoku_solver_backtracking.hpp"
 
 #include <memory>
+
+namespace sudoku {
 SudokuSolverBacktracking::SudokuSolverBacktracking(
     std::shared_ptr<SudokuBoard> board)
     : _board{board} {}
@@ -41,3 +43,4 @@ bool SudokuSolverBacktracking::solve_puzzle(int linear_ind) {
 }
 
 bool SudokuSolverBacktracking::solve_puzzle() { return solve_puzzle(0); }
+}  // namespace sudoku

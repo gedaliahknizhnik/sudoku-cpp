@@ -18,8 +18,8 @@ int main(int argc, char *argv[]) {
   printf("Sudoku time...\n");
   printf("==============\n");
 
-  auto puzzle{std::make_shared<SudokuBoard>(puzzle_file)};
-  SudokuSolverBacktracking backtracker{puzzle};
+  auto puzzle{std::make_shared<sudoku::SudokuBoard>(puzzle_file)};
+  sudoku::SudokuSolverBacktracking backtracker{puzzle};
 
   printf("Starting puzzle:\n");
   std::cout << *puzzle << "\n";

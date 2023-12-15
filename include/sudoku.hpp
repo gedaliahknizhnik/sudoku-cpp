@@ -1,3 +1,11 @@
+/**
+ * @file sudoku.hpp
+ * @author Gedaliah Knizhnik (gedaliah.knizhnik@gmail.com)
+ * @brief A Sudoku Board container
+ * @date 2023-12-14
+ *
+ * @copyright Copyright (c) 2023
+ */
 #ifndef SUDOKU_HPP
 #define SUDOKU_HPP
 
@@ -5,17 +13,48 @@
 #include <iostream>
 #include <string_view>
 
-constexpr int N{9};
-constexpr int BOARDSUM{45 * N};
+/**
+ * @brif Sudoku related values
+ */
+namespace sudoku {
 
-using rowType = std::array<int, N>;
-using gridType = std::array<rowType, N>;
+// CONSTANTS *******************************************************************
 
-// Overload print operator for std::array
+constexpr int N{9};              ///< Size of sudoku board
+constexpr int n{3};              ///< Size of small sudoku square
+constexpr int BOARDSUM{45 * N};  ///< Total sum of numbers on a full board
+
+// VARIABLE ALIASES ************************************************************
+
+using rowType = std::array<int, N>;       ///< Alias for a row
+using gridType = std::array<rowType, N>;  ///< Alias for a sudoku board
+
+/**
+ * @brief Overloaded print operator for rows of a sudoku board.
+ */
 std::ostream &operator<<(std::ostream &out, const rowType row);
 
+// SUDOKU **********************************************************************
+
+/**
+ * @brief Sudoku Board wrapper class
+ *
+ * Loads sudoku boards from CSV files and provides methods for solving a puzzle,
+ * such as getting rows/columns/squares, guessing at various indices, etc.
+ */
 class SudokuBoard {
  public:
+  /**
+   * Construct a sudoku board from a CSV file.
+   *
+   * @param file_name
+   *   string_view full path to the puzzle file from the current directory.
+   *
+   * @exception - std::runtime_exception() puzzle file cannot be found.
+   * @exception - std::runtime_exception() puzzle file is not a 9x9 CSV.
+   * @exception - std::runtime_exception() puzzle file contains an invalid
+   * puzzle.
+   */
   SudokuBoard(const std::string_view file_name);
 
   // Copy constructor (note that this is a deep copy)
@@ -60,5 +99,5 @@ class SudokuBoard {
   // Check for a valid array
   static bool is_array_valid(rowType row, const bool for_win);
 };
-
+}  // namespace sudoku
 #endif

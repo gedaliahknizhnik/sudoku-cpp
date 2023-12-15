@@ -4,7 +4,7 @@
 #include <memory>
 
 #include "sudoku.hpp"
-
+namespace sudoku {
 class SudokuSolverBacktracking {
  public:
   SudokuSolverBacktracking(std::shared_ptr<SudokuBoard> board);
@@ -15,5 +15,5 @@ class SudokuSolverBacktracking {
  private:
   std::shared_ptr<SudokuBoard> _board;
 };
-
+}  // namespace sudoku
 #endif
