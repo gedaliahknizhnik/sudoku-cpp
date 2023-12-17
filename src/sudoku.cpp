@@ -8,11 +8,11 @@
 
 #include "rapidcsv.h"
 namespace sudoku {
-using rowType = std::array<int, N>;
-using gridType = std::array<rowType, N>;
+using row_type = std::array<int, N>;
+using grid_type = std::array<row_type, N>;
 
 // Overload print operator for std::array
-std::ostream &operator<<(std::ostream &out, const rowType row) {
+std::ostream &operator<<(std::ostream &out, const row_type row) {
   std::cout << "[ ";
   for (auto x : row) {
     std::cout << x << " ";
@@ -33,7 +33,7 @@ SudokuBoard::SudokuBoard(const SudokuBoard &board) : _grid{board._grid} {}
 // Overload access operator.
 //  - SudokuBoard[x] will return a std::array reference.
 //  - SudokuBoard[x][y] will return a reference to a single int entry.
-rowType &SudokuBoard::operator[](const int index) { return _grid[index]; }
+row_type &SudokuBoard::operator[](const int index) { return _grid[index]; }
 
 // Overloaded print operation.
 std::ostream &operator<<(std::ostream &out, SudokuBoard &board) {
@@ -45,8 +45,8 @@ std::ostream &operator<<(std::ostream &out, SudokuBoard &board) {
 }
 
 // Extract column as std::array
-rowType SudokuBoard::get_column(const int x) const {
-  rowType col{};
+row_type SudokuBoard::get_column(const int x) const {
+  row_type col{};
   for (int jj{0}; jj < N; ++jj) {
     col[jj] = _grid[jj][x];
   }
@@ -54,8 +54,8 @@ rowType SudokuBoard::get_column(const int x) const {
 }
 
 // Extract square as std::array
-rowType SudokuBoard::get_square(const int x, const int y) const {
-  rowType square{};
+row_type SudokuBoard::get_square(const int x, const int y) const {
+  row_type square{};
   int index{0};
 
   for (int ii{0}; ii < 3; ++ii) {
@@ -65,7 +65,7 @@ rowType SudokuBoard::get_square(const int x, const int y) const {
   }
   return square;
 }
-rowType SudokuBoard::get_square(const int linearInd) const {
+row_type SudokuBoard::get_square(const int linearInd) const {
   int row{ind_to_row(linearInd)};
   int col{ind_to_col(linearInd)};
 
@@ -168,12 +168,15 @@ int SudokuBoard::ind_to_col(const int x) const {
 }
 
 // Guess using linear index
-void SudokuBoard::guess_at_ind(const int linearInd, const int guess) {
+void SudokuBoard::guess(const int linearInd, const int guess) {
   _grid[ind_to_row(linearInd)][ind_to_col(linearInd)] = guess;
+}
+void SudokuBoard::guess(const int row, const int col, const int guess) {
+  _grid[row][col] = guess;
 }
 
 // Check for a valid array
-bool SudokuBoard::is_array_valid(rowType row, const bool for_win) {
+bool SudokuBoard::is_array_valid(row_type row, const bool for_win) {
   std::sort(row.begin(), row.end());
   if (for_win) {
     for (int ii{1}; ii <= N; ++ii) {
