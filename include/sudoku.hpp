@@ -14,7 +14,7 @@
 #include <string_view>
 
 /**
- * @brif Sudoku related values
+ * @brief Sudoku related values
  */
 namespace sudoku {
 
