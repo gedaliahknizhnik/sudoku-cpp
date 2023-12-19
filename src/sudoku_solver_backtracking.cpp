@@ -3,6 +3,7 @@
 #include <memory>
 
 namespace sudoku {
+
 SudokuSolverBacktracking::SudokuSolverBacktracking(
     std::shared_ptr<SudokuBoard> board)
     : _board{board} {}
