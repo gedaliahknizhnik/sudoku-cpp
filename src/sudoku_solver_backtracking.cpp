@@ -1,6 +1,9 @@
 #include "sudoku_solver_backtracking.hpp"
 
 #include <memory>
+
+namespace sudoku {
+
 SudokuSolverBacktracking::SudokuSolverBacktracking(
     std::shared_ptr<SudokuBoard> board)
     : _board{board} {}
@@ -26,7 +29,7 @@ bool SudokuSolverBacktracking::solve_puzzle(int linear_ind) {
     }
 
     // If it is a valid guess - try it.
-    _board->guess_at_ind(linear_ind, guess);
+    _board->guess(linear_ind, guess);
     success = solve_puzzle(linear_ind + 1);
     if (success) {
       return true;
@@ -36,8 +39,9 @@ bool SudokuSolverBacktracking::solve_puzzle(int linear_ind) {
   // If we got to the end - there is no valid guess here that works.
   //  - Reset the slot to 0 (empty)
   //  - Backtrace by returning false.
-  _board->guess_at_ind(linear_ind, 0);
+  _board->guess(linear_ind, 0);
   return false;
 }
 
 bool SudokuSolverBacktracking::solve_puzzle() { return solve_puzzle(0); }
+}  // namespace sudoku

@@ -3,12 +3,18 @@
 
 #include "sudoku_solver_backtracking.hpp"
 
+/**
+ * @brief Run the puzzle solver.
+ */
 int main(int argc, char *argv[]) {
   std::string puzzle_file{};
 
+  // Check for a passed in puzzle file
   if (argc == 1) {
     printf("You didn't specify a puzzle... :( \n");
     printf("Please pass me a path to the puzzle file!\n");
+    printf("Usage:\n");
+    printf("\t solve [path to puzzle csv]\n");
     return 1;
 
   } else {
@@ -18,8 +24,8 @@ int main(int argc, char *argv[]) {
   printf("Sudoku time...\n");
   printf("==============\n");
 
-  auto puzzle{std::make_shared<SudokuBoard>(puzzle_file)};
-  SudokuSolverBacktracking backtracker{puzzle};
+  auto puzzle{std::make_shared<sudoku::SudokuBoard>(puzzle_file)};
+  sudoku::SudokuSolverBacktracking backtracker{puzzle};
 
   printf("Starting puzzle:\n");
   std::cout << *puzzle << "\n";
